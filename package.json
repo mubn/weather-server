@@ -2,8 +2,10 @@
   "name": "weather-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "node -r esm app.js",
+    "watch": "nodemon -r esm ./app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +21,7 @@
   "homepage": "https://github.com/mubn/weather-server#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "http-auth": "^4.1.2",
     "mongoose": "^5.11.12"
