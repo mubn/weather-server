@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node -r esm app.js",
     "watch": "nodemon -r esm ./app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r esm tests/*.js --exit"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,9 @@
     "mongoose": "^5.11.12"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.2.1",
     "nodemon": "^2.0.7"
   }
 }

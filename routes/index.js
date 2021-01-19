@@ -3,7 +3,11 @@ import { Router } from "express";
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.send("Weather Server");
+  const r = {
+    message: "Weather Server",
+  };
+
+  res.json(r);
 });
 
 export default router;
