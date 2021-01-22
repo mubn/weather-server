@@ -1,9 +1,11 @@
 import express from "express";
-import routes from "./routes/index.js";
+import start from "./routes/index.js";
+import sensors from "./routes/sensors.js";
 
 const app = express();
 
-app.use("/", routes);
+app.use("/", start);
+app.use("/sensors", sensors);
 
 const server = app.listen(3000, () => {
   console.log(`Express is running on port ${server.address().port}`);

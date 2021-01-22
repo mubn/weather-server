@@ -13,7 +13,7 @@ describe("GET /", function () {
       .end((err, res) => {
         console.log(res.body);
         res.should.have.status(200);
-        res.body.should.have.property("message");
+        res.body.should.have.property("message", "Weather Server");
         done();
       });
   });
