@@ -5,32 +5,32 @@ import chaiHttp from "chai-http";
 chai.use(chaiHttp);
 chai.should();
 
-describe("GET measurements", function () {
-  it("Should return a message", (done) => {
+describe("GET all measurements", () => {
+  it("Should return measurements", (done) => {
     chai
       .request(app)
-      .get("/sensors/123/measurements/1611356869/1611356856")
+      .get("/measurements")
       .end((err, res) => {
-        console.log(res.body);
         res.should.have.status(200);
-        res.body.should.have.property(
-          "message",
-          "GET measurements from 1611356869 to 1611356856"
-        );
         done();
       });
   });
 });
 
-describe("POST measurements", function () {
-  it("Should return a message", (done) => {
+describe("POST /", () => {
+  it("should save a measurement", (done) => {
     chai
       .request(app)
-      .post("/sensors/123/measurements")
+      .post("/measurements")
+      .send({
+        sensor: "7",
+        temperature: "10",
+        humidity: "92",
+        pressure: "994",
+      })
       .end((err, res) => {
-        console.log(res.body);
         res.should.have.status(200);
-        res.body.should.have.property("message", "POST measurement");
+        res.body.should.have.property("sensor", 7);
         done();
       });
   });
