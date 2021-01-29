@@ -1,7 +1,7 @@
 import { Measurement } from "../models/measurement.js";
 
 export const getAllMeasurements = async (req, res) => {
-  const measurements = await Measurement.find({});
+  let measurements = await Measurement.find({});
   return res.send(measurements);
 };
 
@@ -14,4 +14,13 @@ export const addMeasurement = async (req, res) => {
   });
   await measurement.save();
   return res.send(measurement);
+};
+
+export const getMeasurements = async (req, res) => {
+  let dateFrom = req.params.datefrom;
+  let dateTo = req.params.dateto;
+  let measurements = await Measurement.find({
+    date: { $gte: dateFrom, $lt: dateTo },
+  });
+  return res.send(measurements);
 };

@@ -8,4 +8,6 @@ router
   .get(controller.getAllMeasurements)
   .post(controller.addMeasurement);
 
+router.route("/:datefrom/:dateto").get(controller.getMeasurements);
+
 export default router;
