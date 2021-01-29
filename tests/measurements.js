@@ -72,5 +72,18 @@ describe("Test measurement data", () => {
           done();
         });
     });
+
+    it("Should return empty body if no results in date interval", (done) => {
+      let dateto = Date.now() - 24 * 60 * 60 * 1000;
+      let datefrom = dateto - 24 * 60 * 60 * 1000 * 2;
+      chai
+        .request(app)
+        .get("/measurements/" + datefrom + "/" + dateto)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.length(0);
+          done();
+        });
+    });
   });
 });
