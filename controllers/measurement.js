@@ -19,6 +19,27 @@ export const addMeasurement = async (req, res) => {
 export const getMeasurements = async (req, res) => {
   let dateFrom = req.params.datefrom;
   let dateTo = req.params.dateto;
+
+  if (dateFrom <= 1600000000000 || dateFrom > 1900000000000) {
+    return res.status(400).send({
+      status: false,
+      error: { code: 1010, name: "Invalid date 'from'" },
+    });
+  } else if (dateTo <= 1600000000000 || dateTo > 1900000000000) {
+    return res.status(400).send({
+      status: false,
+      error: { code: 1011, name: "Invalid date 'to'" },
+    });
+  } else if (dateTo < dateFrom) {
+    return res.status(400).send({
+      status: false,
+      error: {
+        code: 1012,
+        name: "Invalid date. Date 'from' must be < than 'to'",
+      },
+    });
+  }
+
   let measurements = await Measurement.find({
     date: { $gte: dateFrom, $lt: dateTo },
   });

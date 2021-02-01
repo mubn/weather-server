@@ -60,7 +60,7 @@ describe("Test measurement data", () => {
   });
 
   describe("GET /:datefrom/:dateto", () => {
-    it("Should return some measurements if exist date interval", (done) => {
+    it("Should return some measurements if exist in date interval", (done) => {
       let dateto = Date.now();
       // The last 24h
       let datefrom = dateto - 24 * 60 * 60 * 1000;
@@ -85,6 +85,45 @@ describe("Test measurement data", () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.have.length(0);
+          done();
+        });
+    });
+
+    it("Should return an error if timestamp wrong", (done) => {
+      let dateto = 1910000000000;
+      let datefrom = 1590000000000;
+      chai
+        .request(app)
+        .get("/measurements/" + datefrom + "/" + dateto)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.nested.property("error.code", 1010);
+          done();
+        });
+    });
+
+    it("Should return an error if timestamp wrong", (done) => {
+      let dateto = 1910000000000;
+      let datefrom = 1590000000000;
+      chai
+        .request(app)
+        .get("/measurements/" + datefrom + "/" + dateto)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.nested.property("error.code", 1010);
+          done();
+        });
+    });
+
+    it("Should return an error if timestamp mismatch", (done) => {
+      let dateto = 1600000000001;
+      let datefrom = 1800000000000;
+      chai
+        .request(app)
+        .get("/measurements/" + datefrom + "/" + dateto)
+        .end((err, res) => {
+          res.should.have.status(400);
+          res.body.should.have.nested.property("error.code", 1012);
           done();
         });
     });
