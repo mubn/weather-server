@@ -26,14 +26,17 @@ describe("Test measurement data", () => {
         .request(app)
         .post("/measurements")
         .send({
-          sensor: 7,
+          sensor: {
+            id: 7,
+            position: "Basement",
+          },
           temperature: 10,
           humidity: 92,
           pressure: 994,
         })
         .end((err, res) => {
           res.should.have.status(200);
-          res.body.should.have.property("sensor", 7);
+          res.body.should.have.nested.property("sensor.id", 7);
           res.body.should.have.property("temperature", 10);
           done();
         });
@@ -49,7 +52,7 @@ describe("Test measurement data", () => {
           res.should.have.status(200);
           res.body.should.have.length(1);
           let data = res.body[0];
-          data.should.have.property("sensor", 7);
+          data.should.have.nested.property("sensor.id", 7);
           data.should.have.property("temperature", 10);
           done();
         });
@@ -59,7 +62,7 @@ describe("Test measurement data", () => {
   describe("GET /:datefrom/:dateto", () => {
     it("Should return some measurements if exist date interval", (done) => {
       let dateto = Date.now();
-      // The last day
+      // The last 24h
       let datefrom = dateto - 24 * 60 * 60 * 1000;
       chai
         .request(app)
@@ -67,7 +70,7 @@ describe("Test measurement data", () => {
         .end((err, res) => {
           res.should.have.status(200);
           let data = res.body[0];
-          data.should.have.property("sensor", 7);
+          data.should.have.nested.property("sensor.id", 7);
           data.should.have.property("temperature", 10);
           done();
         });
