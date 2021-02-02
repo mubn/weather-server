@@ -1,62 +1,68 @@
 import app from "../app";
 import chai from "chai";
 import chaiHttp from "chai-http";
+import { Measurement } from "../models/measurement.js";
+import mongoose from "mongoose";
 
 chai.use(chaiHttp);
 chai.should();
 
-describe("GET /sensors", function () {
-  it("Should return a message", (done) => {
-    chai
-      .request(app)
-      .get("/sensors")
-      .end((err, res) => {
-        console.log(res.body);
-        res.should.have.status(200);
-        res.body.should.have.property("message", "GET sensors");
-        done();
-      });
-  });
-});
+describe("Test sensor data", () => {
+  before(async () => {
+    // Start tests with empty database
+    await Measurement.deleteMany({});
 
-describe("POST /sensors", function () {
-  it("Should return a message", (done) => {
-    chai
-      .request(app)
-      .post("/sensors")
-      .end((err, res) => {
-        console.log(res.body);
-        res.should.have.status(200);
-        res.body.should.have.property("message", "POST sensors");
-        done();
-      });
+    let insert = await Measurement.insertMany([
+      {
+        sensor: {
+          id: 7,
+          position: "Basement",
+        },
+        temperature: 10,
+        humidity: 92,
+        pressure: 994,
+      },
+      {
+        sensor: {
+          id: 8,
+          position: "Garden",
+        },
+        temperature: 5,
+        humidity: 88,
+        pressure: 1001,
+      },
+    ]);
   });
-});
 
-describe("PUT /sensors", function () {
-  it("Should return a message", (done) => {
-    chai
-      .request(app)
-      .put("/sensors/123")
-      .end((err, res) => {
-        console.log(res.body);
-        res.should.have.status(200);
-        res.body.should.have.property("message", "PUT sensors 123");
-        done();
-      });
+  after(async () => {
+    // Disconect after all tests
+    await Measurement.deleteMany({});
+    mongoose.disconnect();
   });
-});
 
-describe("DELETE /sensors", function () {
-  it("Should return a message", (done) => {
-    chai
-      .request(app)
-      .delete("/sensors/123")
-      .end((err, res) => {
-        console.log(res.body);
-        res.should.have.status(200);
-        res.body.should.have.property("message", "DELETE sensors 123");
-        done();
-      });
+  describe("GET /", () => {
+    it("Should return all sensors", (done) => {
+      chai
+        .request(app)
+        .get("/sensors")
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.length(2);
+          done();
+        });
+    });
+  });
+
+  describe("DELETE /:sensorId", () => {
+    it("Delete sensor", (done) => {
+      chai
+        .request(app)
+        .delete("/sensors/7")
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.have.property("deletedCount", 1);
+          done();
+        });
+    });
   });
 });

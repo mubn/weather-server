@@ -10,14 +10,12 @@ chai.should();
 describe("Test measurement data", () => {
   before(async () => {
     // Start tests with empty database
-    console.log("before");
     await Measurement.deleteMany({});
   });
 
   after(async () => {
     // Disconect after all tests
-    console.log("after");
-    mongoose.disconnect();
+    await Measurement.deleteMany({});
   });
 
   describe("POST /", () => {

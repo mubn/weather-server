@@ -1,37 +1,10 @@
-import { Router } from "express";
+import Router from "express";
+import * as controller from "../controllers/sensor.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  const r = {
-    message: "GET sensors",
-  };
+router.route("/").get(controller.getAllSensors);
 
-  res.json(r);
-});
-
-router.post("/", (req, res) => {
-  const r = {
-    message: "POST sensors",
-  };
-
-  res.json(r);
-});
-
-router.put("/:sensorId", (req, res) => {
-  const r = {
-    message: `PUT sensors ${req.params.sensorId}`,
-  };
-
-  res.json(r);
-});
-
-router.delete("/:sensorId", (req, res) => {
-  const r = {
-    message: `DELETE sensors ${req.params.sensorId}`,
-  };
-
-  res.json(r);
-});
+router.route("/:sensorId").delete(controller.deleteSensor);
 
 export default router;
