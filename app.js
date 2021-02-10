@@ -1,5 +1,8 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
 import start from "./routes/index.js";
 import sensors from "./routes/sensors.js";
 import measurements from "./routes/measurements.js";
@@ -11,6 +14,9 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(cors());
+app.use(morgan("combined"));
 
 mongoose.connect(process.env.DATABASE, {
   useNewUrlParser: true,
