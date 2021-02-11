@@ -11,12 +11,28 @@ import measurements from "./routes/measurements.js";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
+let envVars = ["DATABASE", "AUTH0_DOMAIN", "AUTH0_AUDIENCE", "APP_DOMAIN"];
+
+let unsetEnvVars = envVars.filter(
+  (env) => typeof process.env[env] === "undefined"
+);
+
+if (unsetEnvVars.length > 0) {
+  throw new Error(
+    "Required einvironment variables are not set: [" +
+      unsetEnvVars.join(", ") +
+      "]"
+  );
+}
 
 const app = express();
 
 const corsOptions = {
-  origin: "",
+  origin: process.env.APP_DOMAIN,
 };
 
 const checkJwt = expressJwt({
@@ -39,7 +55,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(morgan("combined"));
-app.use(checkJwt);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(checkJwt);
+}
 
 mongoose.connect(process.env.DATABASE, {
   useNewUrlParser: true,

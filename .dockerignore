@@ -3,4 +3,5 @@ coverage
 tests
 npm-debug.log
 .nyc_output
+.env*
 Dockerfile
