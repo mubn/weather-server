@@ -3,6 +3,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import expressJwt from "express-jwt";
+import jwksRsa from "jwks-rsa";
 import start from "./routes/index.js";
 import sensors from "./routes/sensors.js";
 import measurements from "./routes/measurements.js";
@@ -12,11 +14,32 @@ import mongoose from "mongoose";
 dotenv.config();
 
 const app = express();
+
+const corsOptions = {
+  origin: "",
+};
+
+const checkJwt = expressJwt({
+  // Dynamically provide a signing key based on the [Key ID](https://tools.ietf.org/html/rfc7515#section-4.1.4) header parameter ("kid") and the signing keys provided by the JWKS endpoint.
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+  }),
+
+  // Validate the audience and the issuer.
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  algorithms: ["RS256"],
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan("combined"));
+app.use(checkJwt);
 
 mongoose.connect(process.env.DATABASE, {
   useNewUrlParser: true,
