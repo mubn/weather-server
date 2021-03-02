@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== "production") {
   dotenv.config();
 }
 
-let envVars = ["DATABASE", "AUTH0_DOMAIN", "AUTH0_AUDIENCE", "APP_DOMAIN"];
+let envVars = ["DATABASE", "AUTH_DOMAIN", "AUTH_AUDIENCE", "APP_DOMAIN"];
 
 let unsetEnvVars = envVars.filter(
   (env) => typeof process.env[env] === "undefined"
@@ -41,12 +41,12 @@ const checkJwt = expressJwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+    jwksUri: `https://${process.env.AUTH_DOMAIN}/.well-known/jwks.json`,
   }),
 
   // Validate the audience and the issuer.
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  audience: process.env.AUTH_AUDIENCE,
+  issuer: `https://${process.env.AUTH_DOMAIN}/`,
   algorithms: ["RS256"],
 });
 

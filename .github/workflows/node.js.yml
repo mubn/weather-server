@@ -30,6 +30,6 @@ jobs:
         env:
           CI: true
           DATABASE: mongodb://localhost:27017/weatherData
-          AUTH0_DOMAIN: xyz.eu.auth0.com
-          AUTH0_AUDIENCE: https://weather-app
+          AUTH_DOMAIN: xyz.eu.auth0.com
+          AUTH_AUDIENCE: https://weather-app
           APP_DOMAIN: localhost
