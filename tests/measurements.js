@@ -9,11 +9,6 @@ chai.should();
 
 describe("Test measurement data", () => {
   before(async () => {
-    mongoose.connect(process.env.DATABASE, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
     // Start tests with empty database
     await Measurement.deleteMany({});
   });
@@ -21,7 +16,6 @@ describe("Test measurement data", () => {
   after(async () => {
     // Cleanup after all tests
     await Measurement.deleteMany({});
-    mongoose.disconnect();
   });
 
   describe("POST /", () => {
