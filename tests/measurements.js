@@ -87,9 +87,9 @@ describe("Test measurement data", () => {
         });
     });
 
-    it("Should return an error if timestamp wrong", (done) => {
-      let dateto = 1910000000000;
-      let datefrom = 1590000000000;
+    it("Should return an error if date 'from' wrong", (done) => {
+      let dateto = 1900000000000;
+      let datefrom = 123;
       chai
         .request(app)
         .get("/measurements/" + datefrom + "/" + dateto)
@@ -100,15 +100,15 @@ describe("Test measurement data", () => {
         });
     });
 
-    it("Should return an error if timestamp wrong", (done) => {
-      let dateto = 1910000000000;
-      let datefrom = 1590000000000;
+    it("Should return an error if date 'to' wrong", (done) => {
+      let dateto = 123;
+      let datefrom = 1600000000001;
       chai
         .request(app)
         .get("/measurements/" + datefrom + "/" + dateto)
         .end((err, res) => {
           res.should.have.status(400);
-          res.body.should.have.nested.property("error.code", 1010);
+          res.body.should.have.nested.property("error.code", 1011);
           done();
         });
     });
