@@ -1,19 +1,35 @@
 import { Measurement } from "../models/measurement.js";
 
 export const getAllMeasurements = async (req, res) => {
-  let measurements = await Measurement.find({});
-  return res.send(measurements);
+  try {
+    let measurements = await Measurement.find({});
+    return res.send(measurements);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      status: false,
+      error: { code: 1001, name: "An error occured" },
+    });
+  }
 };
 
 export const addMeasurement = async (req, res) => {
-  let measurement = new Measurement({
-    sensor: req.body.sensor,
-    temperature: req.body.temperature,
-    humidity: req.body.humidity,
-    pressure: req.body.pressure,
-  });
-  await measurement.save();
-  return res.send(measurement);
+  try {
+    let measurement = new Measurement({
+      sensor: req.body.sensor,
+      temperature: req.body.temperature,
+      humidity: req.body.humidity,
+      pressure: req.body.pressure,
+    });
+    await measurement.save();
+    return res.send(measurement);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      status: false,
+      error: { code: 1001, name: "An error occured" },
+    });
+  }
 };
 
 export const getMeasurements = async (req, res) => {
@@ -39,9 +55,16 @@ export const getMeasurements = async (req, res) => {
       },
     });
   }
-
-  let measurements = await Measurement.find({
-    date: { $gte: dateFrom, $lt: dateTo },
-  });
-  return res.send(measurements);
+  try {
+    let measurements = await Measurement.find({
+      date: { $gte: dateFrom, $lt: dateTo },
+    });
+    return res.send(measurements);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      status: false,
+      error: { code: 1001, name: "An error occured" },
+    });
+  }
 };
