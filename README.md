@@ -93,3 +93,19 @@ curl \
 -X DELETE \
 -s http://localhost:3000/sensors/7
 ```
+
+## Authentication
+
+To force authentication, set the environment variable "NODE_ENV" to "production".
+
+Also set the variables "AUTH_DOMAIN" and "AUTH_AUDIENCE" used for the token validation.
+
+Get your web token then and set it in calls:
+
+```
+curl -s \
+-H 'authorization: Bearer eydFg...' \
+http://{$APP_DOMAIN}:3000/measurements
+```
+
+For more informations see for example the [Auth0 documentation](https://auth0.com/docs/quickstart/backend/nodejs/02-using)
